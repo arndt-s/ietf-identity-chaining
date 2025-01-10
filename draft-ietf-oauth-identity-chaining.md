@@ -79,39 +79,42 @@ A client in trust domain A that needs to access a resource server in trust domai
 The identity and authorization chaining flow outlined below describes how a combination of OAuth 2.0 Token Exchange {{RFC8693}} and JWT Profile for OAuth 2.0 Client Authentication and Authorization Grants {{RFC7523}} are used to address the use cases identified. The (Appendix, (#Examples)) include two additional examples that describe how this flow is used when the resource server acts as the client or the authorization server acts as the client.
 
 ~~~~
-+-------------+                            +-------------+ +---------+
-|Authorization|         +--------+         |Authorization| |Protected|
-|Server       |         |Client  |         |Server       | |Resource |
-|Domain A     |         |Domain A|         |Domain B     | |Domain B |
-+-------------+         +--------+         +-------------+ +---------+
-       |                    |                     |             |
-       |                    |----+                |             |
-       |                    |    | (A) discover   |             |
-       |                    |<---+ Authorization  |             |
-       |                    |      Server         |             |
-       |                    |      Domain B       |             |
-       |                    |                     |             |
-       |                    |                     |             |
-       | (B) exchange token |                     |             |
-       |   [RFC 8693]       |                     |             |
-       |<-------------------|                     |             |
-       |                    |                     |             |
-       | (C) <authorization |                     |             |
-       |       grant JWT>   |                     |             |
-       | - - - - - - - - - >|                     |             |
-       |                    |                     |             |
-       |                    | (D) present         |             |
-       |                    | authorization grant |             |
-       |                    | [RFC 7523]          |             |
-       |                    | ------------------->|             |
-       |                    |                     |             |
-       |                    | (E) <access token>  |             |
-       |                    | <- - - - - - - - - -|             |
-       |                    |                     |             |
-       |                    |               (F) access          |
-       |                    | --------------------------------->|
-       |                    |                     |             |
-       |                    |                     |             |
++--------+  +--------+       +--------+         +--------+  +--------+
+|Resource|  | Authz  |       |Abstract|         | Authz  |  |Resource|
+| Server |  | Server |       | Client |         | Server |  | Server |
+|Domain A|  |Domain A|       |Domain A|         |Domain B|  |Domain B|
++--------+  +--------+       +--------+         +--------+  +--------+
+    |         |                   |                   |           |
+    |         |       - - - - - ->|                   |           |
+    |         |    (Inbound token |                   |           |
+    |         |     out of scope) |----+ (A) Discover |           |
+    |         |                   |    | appropriate  |           |
+    |         |                   |<---+ Server in    |           |
+    |         |                   |      Domain B     |           |
+    |         |    (B) Exchange   |                   |           |
+    |         |        token      |                   |           |
+    |         |        [RFC 8693] |                   |           |
+    |         |<- - - - - - - - - |                   |           |
+    |         |                   |                   |           |
+    |         |(C) <authorization |                   |           |
+    |         |     grant JWT>    |                   |           |
+    |         |     [RFC 7523]    |                   |           |
+    |         |- - - - - - - - - >|                   |           |
+    |         |                   |                   |           |
+    |         |                   | (D) Present       |           |
+    |         |                   |     authorization |           |
+    |         |                   |     grant         |           |
+    |         |                   | - - - - - - - - ->|           |
+    |         |                   |                   |           |
+    |         |                   | (E) <access token>|           |
+    |         |                   | <- - - - - - - - -|           |
+    |         | (F) <access token>|                   |           |
+    | <- - - - - - - - - - - - - -|                   |           |
+    |         |                   |                   |           |
+    |         |                   |  (G) access       |           |
+    | - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ->|
+    |         |                   |                   |           |
+    |         |                   |                   |           |
 ~~~~
 {: title='Identity and Authorization Chaining Flow'}
 
