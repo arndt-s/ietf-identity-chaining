@@ -53,7 +53,7 @@ informative:
 
   I-D.ietf-oauth-security-topics:
   I-D.ietf-oauth-resource-metadata:
-
+  I-D.draft-ietf-oauth-v2-1-12:
 
 --- abstract
 
@@ -277,6 +277,9 @@ To be added.
 
 ## Client Authentication
 Authorization Servers SHOULD follow the OAuth 2.0 Security Best Current Practice {{I-D.ietf-oauth-security-topics}} for client authentication.
+
+## Sender Constraining Tokens
+Authorization Servers SHOULD follow the The OAuth 2.1 Authorization Framework {{I-D.draft-ietf-oauth-v2-1-12}} for sender constraining tokens.
 
 --- back
 
