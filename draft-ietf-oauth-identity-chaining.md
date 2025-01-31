@@ -437,6 +437,16 @@ The flow contains the following steps:
 
 (G) The client in Domain A uses the received access token to access the protected resource in Domain B.
 
+## Delegated Key Binding
+
+In some environments, there is a need to bind the access token issued by the Authorization Server in Domain B to a private key held by the client in Domain A. This is so that the Resource Server in Domain B can verify the proof of possession of the private key of the client in Domain A when the client in Domain A presents the token to the Resource Server in Domain B. Any application in Domain A may act as a client, including applications that are resource servers in Domain A and need to access resource servers in Domain B in order to complete a request.
+
+In the case where the Resource Server in Domain A is acting as the client, the access token may be constrained using existing techniques as described in Security Considerations (add reference once it is merged).
+
+The case where the Authorization Server in Domain A is acting as a client is more complicated since the Authorization Server in domain A acting as client does not have access to the key material of the client on whose behalf the access token is being requested.
+
+However, the trust relationship between the Authorization Server in Domain A and the Authorization Server in Domain B can be leveraged to sender constrain the access token issued by the Authorization Server in domain B. This can be achieved as follows. The Authorization Server in Domain A verifies proof of posession of the key presented by the client. It then includes the "cnf" claim of the client in Domain A in the token request sent to the Authorization Server in Domain B. This can, for example, be accomplished by including a "requested_cnf" claim, that contains the "cnf" claim of the Resource Server in Domain A, in the assertion authorization grant sent to the Authorization Server in Domain B The Authorization Server in Domain B then includes a "cnf" claim that matches the value of the "requested_cnf" claim in the authorization grant in the returned access token. The client in domain A that presents the access token must use the key matching the "cnf" claim to generate a DPoP proof or setup a MTLS session when presenting the access token to a resource server in Domain B.
+
 # Acknowledgements {#Acknowledgements}
 The editors would like to thank Joe Jubinski, Justin Richer, Aaron Parecki, Dean H. Saxe, and others (please let us know, if you've been mistakenly omitted) for their valuable input, feedback and general support of this work.
 
